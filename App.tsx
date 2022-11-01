@@ -8,9 +8,14 @@ function App() {
   const Stack = createNativeStackNavigator();
   return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="FrontPage">
+        <Stack.Navigator 
+            initialRouteName="FrontPage"
+            screenOptions={{
+              headerShown: false
+            }}
+            >
           <Stack.Screen 
-              name="FrontPage" 
+              name="Front Page" 
               component={FrontPageScreen} 
             />
           <Stack.Screen 

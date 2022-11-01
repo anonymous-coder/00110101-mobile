@@ -8,7 +8,7 @@ function FrontPageScreen() {
   const [selectedId, setSelectedId] = useState(null);
 
   const renderItem = ({ item }) => {
-    const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
+    const backgroundColor = item.id === selectedId ? '#E5E4E2' : '#fff';
     const color = item.id === selectedId ? 'white' : 'black';
 
     return (
