@@ -10,16 +10,17 @@
   },
   "dependencies": {
     "expo": "~46.0.16",
+    "expo-localization": "~13.1.0",
     "expo-status-bar": "~1.4.0",
+    "i18n-js": "^4.1.1",
     "react": "18.0.0",
-    "react-native": "0.69.6",
-    "expo-localization": "~13.1.0"
+    "react-native": "0.69.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
-    "typescript": "^4.6.3",
     "@types/react": "~18.0.0",
-    "@types/react-native": "~0.69.1"
+    "@types/react-native": "~0.69.1",
+    "typescript": "^4.6.3"
   },
   "private": true
 }
