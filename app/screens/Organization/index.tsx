@@ -1,17 +1,13 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet
-} from "react-native";
-import { width } from "../../utils";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { width } from '../../utils';
 
 class Organization extends React.Component {
   render() {
     return (
-        <View style={styles.container}>
-            <Text>Organization</Text>
-        </View>
+      <View style={styles.container}>
+        <Text>Organization</Text>
+      </View>
     );
   }
 }
@@ -20,7 +16,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: width,
-    backgroundColor: colors.exexlight_gray
+    backgroundColor: colors.exexlight_gray,
   },
 });
 
