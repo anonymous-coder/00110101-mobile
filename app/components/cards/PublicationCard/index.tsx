@@ -1,8 +1,7 @@
 import { Text, Image, TouchableOpacity, View } from 'react-native';
 import { styles } from './styles';
 
-const PublicationCard = ({ item, onPress, backgroundColor, textColor }) => {
-  console.log('item', item.media);
+const PublicationCard = ({ item, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.item}>
       <View style={styles.titleCntr}>
