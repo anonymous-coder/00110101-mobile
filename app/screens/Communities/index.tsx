@@ -1,11 +1,18 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import { styles } from './styles';
+import * as React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-export default function CommunitiesScreen() {
+import CommunitiesScreen from './Communities';
+import CommunityScreen from './Community';
+import CommunityDiscussionScreen from './CommunityDiscussion';
+
+// Meeting Spots, influenced by reddit
+export default function CommunitiesStackScreen() {
+  const CommunitiesStack = createNativeStackNavigator();
   return (
-    <View style={styles.container}>
-      <Text>Communities</Text>
-    </View>
+    <CommunitiesStack.Navigator screenOptions={{ headerShown: false }}>
+      <CommunitiesStack.Screen name="communities-feed" component={CommunitiesScreen} />
+      <CommunitiesStack.Screen name="community" component={CommunityScreen} />
+      <CommunitiesStack.Screen name="discussion" component={CommunityDiscussionScreen} />
+    </CommunitiesStack.Navigator>
   );
 }
