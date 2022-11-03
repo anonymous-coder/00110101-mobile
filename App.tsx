@@ -18,7 +18,7 @@ export default function App() {
           name="Front Page" 
           component={FrontPageStackScreen} 
           options={{
-            tabBarLabel: 'Front Page',
+            tabBarShowLabel: false,
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="reader-outline" color={color} size={size} />
             ),
@@ -28,7 +28,7 @@ export default function App() {
             name="Communities" 
             component={CommunitiesStackScreen} 
             options={{
-              tabBarLabel: 'Communities',
+              tabBarShowLabel: false,
               tabBarIcon: ({ color, size }) => (
                  <Feather name="users" color={color} size={size} />
               ),
@@ -38,7 +38,7 @@ export default function App() {
             name="Post" 
             component={PostFormScreen} 
             options={{
-              tabBarLabel: 'Post',
+              tabBarShowLabel: false,
               tabBarIcon: ({ color, size }) => (
                  <Ionicons name="add" color={color} size={size} />
               ),
@@ -48,7 +48,7 @@ export default function App() {
           name="User" 
           component={UserStackScreen} 
           options={{
-            tabBarLabel: 'User',
+            tabBarShowLabel: false,
             tabBarIcon: ({ color, size }) => (
                <Feather name="user" color={color} size={size} />
             ),
@@ -58,7 +58,7 @@ export default function App() {
           name="Messaging" 
           component={MessagingStackScreen} 
           options={{
-            tabBarLabel: 'Messaging',
+            tabBarShowLabel: false,
             tabBarIcon: ({ color, size }) => (
                <Ionicons name="chatbox-outline" color={color} size={size} />
             ),
