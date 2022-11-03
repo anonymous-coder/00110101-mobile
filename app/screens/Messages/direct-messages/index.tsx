@@ -5,7 +5,7 @@ import { styles } from './styles';
 export default function DirectMessagesScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
+      <View style={styles.content}>
         <Text>Direct Messages</Text>
       </View>
     </SafeAreaView>

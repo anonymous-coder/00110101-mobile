@@ -5,7 +5,7 @@ import { styles } from './styles';
 export default function UserFeedScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
+      <View style={styles.content}>
         <Text>User</Text>
       </View>
     </SafeAreaView>

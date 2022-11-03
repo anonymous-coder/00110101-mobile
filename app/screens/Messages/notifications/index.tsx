@@ -5,8 +5,8 @@ import { styles } from './styles';
 export default function NotificationsScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-        <Text>Notificationss</Text>
+      <View style={styles.content}>
+        <Text>Notifications</Text>
       </View>
     </SafeAreaView>
   );

@@ -5,7 +5,7 @@ import { styles } from './styles';
 export default function CommunitiesScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
+      <View style={styles.content}>
         <Text>Communities</Text>
       </View>
     </SafeAreaView>

@@ -12,8 +12,9 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   title: {
+    fontFamily: 'Roboto-Black',
     fontSize: 20,
-    fontWeight: 'bold',
+    color: '#111111',
   },
   descriptionCntr: {
     paddingTop: 4,
@@ -21,7 +22,9 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   description: {
+    fontFamily: 'Roboto-Regular',
     fontSize: 16,
+    color: '#191919',
   },
   image: {
     width: width,
