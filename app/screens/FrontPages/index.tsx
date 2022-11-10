@@ -19,9 +19,9 @@ function FrontPageTabs() {
     <Tab.Navigator
     // tabBar={props => <FrontPageTabBar {...props} />}
     >
-      <Tab.Screen name="front-page-main" component={FrontPageMainScreen} />
-      <Tab.Screen name="front-page-latest" component={FrontPageLatestScreen} />
-      <Tab.Screen name="front-page-active" component={FrontPageActiveScreen} />
+      <Tab.Screen name="main" component={FrontPageMainScreen} />
+      <Tab.Screen name="latest" component={FrontPageLatestScreen} />
+      <Tab.Screen name="active" component={FrontPageActiveScreen} />
     </Tab.Navigator>
   );
 }

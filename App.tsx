@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
@@ -12,9 +13,13 @@ import CommunitiesStackScreen from './app/screens/Communities';
 import PostFormScreen from './app/screens/Post';
 import UserStackScreen from './app/screens/User';
 import MessagingStackScreen from './app/screens/Messages';
+import AuthenticationScreen from './app/screens/Authentication';
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [isAuthenticated, setAuthenticated] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [fontsLoaded] = useFonts({
     'Roboto-Black': require('./assets/fonts/Roboto-Black.ttf'),
     'Roboto-BlackItalic': require('./assets/fonts/Roboto-BlackItalic.ttf'),
@@ -44,9 +49,19 @@ export default function App() {
     return null;
   }
 
+  if (isLoading) {
+    // We haven't finished checking for the token yet
+    return <SplashScreen />;
+  }
+  
   return (
     <NavigationContainer>
-      <Tab.Navigator screenOptions={{ headerShown: false }}>
+      {isAuthenticated ? (
+          <Stack.Navigator  screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="SignIn" component={AuthenticationScreen} />
+        </Stack.Navigator>
+      ) : (
+        <Tab.Navigator screenOptions={{ headerShown: false }}>
         <Tab.Screen 
           name="Front Page" 
           component={FrontPageStackScreen} 
@@ -98,6 +113,8 @@ export default function App() {
           }}
           />
       </Tab.Navigator>
+      )}
+
     </NavigationContainer>
   );
 }
