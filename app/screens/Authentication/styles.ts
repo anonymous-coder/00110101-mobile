@@ -33,12 +33,27 @@ export const styles = StyleSheet.create({
     fontFamily: 'Helvetica',
     fontWeight: '900',
     fontSize: 36,
+    letterSpacing: -1.2,
   },
   bottom: {
-    height: '32%',
+    height: '32%', // TODO take bottom safeview into account
     width: width,
+    padding: 10,
+
     justifyContent: 'flex-start',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: '#111',
+  },
+  loadingText: {
+    fontFamily: 'JetBrainsMono-Regular',
+    color: 'yellow',
+  },
+  errorText: {
+    fontFamily: 'JetBrainsMono-Regular',
+    color: 'red',
+  },
+  submitText: {
+    fontFamily: 'JetBrainsMono-Regular',
+    color: 'green',
   },
 });

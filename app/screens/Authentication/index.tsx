@@ -1,61 +1,23 @@
 import React from 'react';
+import { useMachine } from '@xstate/react';
 import { View, Text, SafeAreaView, TextInput } from 'react-native';
+import AuthenticationMachine from './machine.xstate.ts';
+import AuthenticationEmailScreen from './email';
+import AuthenticationCodeScreen from './code';
+// import CodeSentScreen from './code-sent';
+// import AfterAuthenticationScreen from './code-sent';
 import { styles } from './styles';
 
 export default function AuthenticationScreen() {
-  const [email, setEmail] = React.useState('');
-  const [loading, setLoading] = React.useState(false);
+  const [state, send, service] = useMachine(AuthenticationMachine);
 
-  function onChangeEmail(text) {
-    setEmail(text);
-  }
-
-  const checkEmail = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('https://mywebsite.com/endpoint/', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-        }),
-      });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetch('https://mywebsite.com/endpoint/', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email: email,
-    }),
-  });
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.form}>
-        <View style={styles.titleView}>
-          <Text style={styles.title}>ENTER EMAIL</Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeEmail}
-          value={email}
-          placeholder="josephine@example.com"
-          keyboardType="email-address"
-        />
-      </View>
-
-      <View style={styles.bottom}></View>
+      {state.matches('enterEmail') ? <AuthenticationEmailScreen /> : null}
+      {state.matches('code') ? <AuthenticationCodeScreen /> : null}
     </SafeAreaView>
   );
 }
+// {/* {state.matches('code-sent') ? <CodeSentScreen /> : null} */}
+
+// {/* {state.matches('after-authentication') ? <CodeSentScreen /> : null} */}

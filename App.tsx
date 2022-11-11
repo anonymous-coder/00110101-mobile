@@ -37,6 +37,8 @@ export default function App() {
     'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
     'Roboto-Thin': require('./assets/fonts/Roboto-Thin.ttf'),
     'Roboto-ThinItalic': require('./assets/fonts/Roboto-ThinItalic.ttf'),
+    'JetBrainsMono-Regular': require('./assets/fonts/JetBrainsMono-Regular.ttf'),
+   
   });
 
   const onLayoutRootView = useCallback(async () => {
