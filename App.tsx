@@ -18,9 +18,20 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [isAuthenticated, setAuthenticated] = useState(true);
+  const [isAuthenticated, setAuthenticated] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  
   const [fontsLoaded] = useFonts({
+    'Inter-Black': require('./assets/fonts/Inter-Black.ttf'),
+    'Inter-Bold': require('./assets/fonts/Inter-Bold.ttf'),
+    'Inter-ExtraBold': require('./assets/fonts/Inter-ExtraBold.ttf'),
+    'Inter-ExtraLight': require('./assets/fonts/Inter-ExtraLight.ttf'),
+    'Inter-Light': require('./assets/fonts/Inter-Light.ttf'),
+    'Inter-Medium': require('./assets/fonts/Inter-Medium.ttf'),
+    'Inter-Regular': require('./assets/fonts/Inter-Regular.ttf'),
+    'Inter-SemiBold': require('./assets/fonts/Inter-SemiBold.ttf'),
+    'Inter-Thin': require('./assets/fonts/Inter-Thin.ttf'),
+
     'Roboto-Black': require('./assets/fonts/Roboto-Black.ttf'),
     'Roboto-BlackItalic': require('./assets/fonts/Roboto-BlackItalic.ttf'),
 
@@ -58,7 +69,7 @@ export default function App() {
   
   return (
     <NavigationContainer>
-      {isAuthenticated ? (
+      {!isAuthenticated ? (
           <Stack.Navigator  screenOptions={{ headerShown: false }}>
             <Stack.Screen name="SignIn" component={AuthenticationScreen} />
         </Stack.Navigator>

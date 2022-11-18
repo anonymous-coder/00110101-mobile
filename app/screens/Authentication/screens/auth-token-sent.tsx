@@ -2,11 +2,11 @@ import * as React from 'react';
 import { View, Text, SafeAreaView } from 'react-native';
 import { styles } from './styles';
 
-export default function CodeSentScreen() {
+export function AuthTokenSentScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text>Code Sent</Text>
+        <Text>Auth Token Sent Screen</Text>
       </View>
     </SafeAreaView>
   );
