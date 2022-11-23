@@ -5,6 +5,7 @@ import AuthFormMachine from './xstate/machine.xstate.ts';
 import {
   EmailScreen,
   // AuthTokenSentScreen,
+  MessageScreen,
   AuthTokenScreen,
   AfterAuthenticationScreen,
 } from './screens';
@@ -15,7 +16,9 @@ export default function AuthenticationScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {state.matches('greetings') ? <MessageScreen message="WELCOME" /> : null}
       {state.matches('enteringEmail') ? <EmailScreen /> : null}
+      {state.matches('codeSent') ? <MessageScreen message="CHECK EMAIL" /> : null}
       {state.matches('enteringAuthToken') ? <AuthTokenSentScreen /> : null}
       {state.matches('after-authentication') ? <AfterAuthenticationScreen /> : null}
     </SafeAreaView>

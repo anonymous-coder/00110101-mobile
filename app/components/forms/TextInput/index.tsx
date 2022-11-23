@@ -8,6 +8,7 @@ interface ITextInput {
   placeholder: string;
   keyboardType: string;
   autoCapitalize?: string;
+  autoFocus: boolean;
 }
 
 export function TextInput({
@@ -16,6 +17,7 @@ export function TextInput({
   placeholder,
   keyboardType,
   autoCapitalize = 'none',
+  autoFocus = false,
 }: ITextInputStyled) {
   return (
     <TextInputRN
@@ -25,6 +27,7 @@ export function TextInput({
       placeholder={placeholder}
       keyboardType={keyboardType}
       autoCapitalize={autoCapitalize}
+      autoFocus={autoFocus}
     />
   );
 }

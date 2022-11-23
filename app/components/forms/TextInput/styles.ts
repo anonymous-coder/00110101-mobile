@@ -4,11 +4,9 @@ import { width } from '../../../utils';
 export const styles = StyleSheet.create({
   input: {
     height: 50,
-    width: width,
-    marginLeft: -10,
-    paddingLeft: 10,
+    width: '80%',
 
-    backgroundColor: '#fff',
+    paddingLeft: 10,
     fontSize: 24,
   },
 });

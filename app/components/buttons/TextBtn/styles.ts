@@ -9,8 +9,6 @@ export const styles = StyleSheet.create({
     width: width,
     marginTop: 10,
     paddingRight: 50,
-
-    backgroundColor: '#fff',
   },
   label: {
     fontFamily: 'Helvetica',

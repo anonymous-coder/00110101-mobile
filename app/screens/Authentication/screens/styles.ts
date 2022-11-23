@@ -11,18 +11,18 @@ export const styles = StyleSheet.create({
     width: width,
   },
   sidebar: {
-    height: height - 60,
-    width: 50,
+    height: height,
+    width: width * 0.32 * 0.32,
   },
   sidebarWrapper: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
   },
   bar: {
     height: '100%',
-    width: 10,
-    backgroundColor: 'black',
+    width: 5,
+    backgroundColor: '#c4c4c4',
   },
   form: {
     display: 'flex',
@@ -38,31 +38,44 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: width,
-    height: 100,
+    // borderLeftWidth: 10,
+    borderLeftBackgroundColor: '#111'
+
+
   },
-  inputBarWrapper: {
-    position: 'relative',
-    left: 0,
+  errorLabelWrapper: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    width: width,
+    marginTop: 50,
+    // borderLeftWidth: 10,
+    borderLeftBackgroundColor: '#111'
 
-    height: 50,
-    width: 15,
-    backgroundColor: '#111',
+
+  },
+  errorLabel: {
+    fontSize: 24,
+    color: 'red',
+    fontFamily: 'Roboto-Regular',
   },
   inputBar: {
     height: 50,
     width: 20,
     backgroundColor: '#111',
   },
+  errorInputBar: {
+    height: 50,
+    width: 20,
+    backgroundColor: 'red',
+  },
   inputBarSpace: {
     width: 10,
   },
   textInput: {
     height: 50,
-    width: width - 100,
+    width: width - 250,
     fontSize: 24,
   },
   top: {
@@ -77,33 +90,7 @@ export const styles = StyleSheet.create({
     color: '#111',
     fontFamily: 'Inter-Black',
   },
+  topSpace: {
+    height: 100,
+  },
 });
-
-// import { StyleSheet } from 'react-native';
-// import { width, height } from '../../../utils';
-
-// export const styles = StyleSheet.create({
-//   container: {
-//     height: height * 0.328,
-//     width: width,
-
-//     backgroundColor: '#fafafa',
-//     borderBottomLWidth: 2,
-//     borderBottomColor: 'green',
-//   },
-//   form: {
-//     flex: 1,
-//     justifyContent: 'space-around',
-//     alignItems: 'center',
-
-//     backgroundColor: '#fafafa',
-//   },
-//   loadingText: {
-//     fontFamily: 'JetBrainsMono-Regular',
-//     color: 'yellow',
-//   },
-//   errorText: {
-//     fontFamily: 'JetBrainsMono-Regular',
-//     color: 'red',
-//   },
-// });

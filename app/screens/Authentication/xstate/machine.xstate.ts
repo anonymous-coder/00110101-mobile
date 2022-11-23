@@ -1,7 +1,12 @@
-import { assign, createMachine } from 'xstate';
+import { assign, createMachine, interpret } from 'xstate';
 import { checkEmail, checkAuthToken, postData } from '../../../http';
 import { authCheckEmailAPI, emailSchema } from '../../../constants';
+import * as yup from 'yup';
 
+const isEmailValid = (context, event) => {
+  console.log('context, event', context, event)
+  return context.canSearch && event.query && event.query.length > 0;
+};
 const AuthFormMachine = createMachine(
   {
     tsTypes: {} as import('./machine.xstate.typegen').Typegen0,
@@ -10,178 +15,87 @@ const AuthFormMachine = createMachine(
       checkEmail: (context: any, event: any) => Promise<any>;
     },
     id: 'AuthFormMachineWithValidation',
-    initial: 'enteringEmail',
+    initial: 'greetings',
     context: {
       email: '',
       authToken: '',
       error: '',
+      errorMessage: '',
     },
     states: {
+      greetings: {
+        after: {
+          // after 1 second, transition to yellow
+          2000: { target: 'enteringEmail.idle' },
+        },
+      },
       enteringEmail: {
-        // 1. start at idle
-        initial: 'idle',
-        id: 'enteringEmail',
+        intial: 'idle',
         states: {
-          // 2. idle state, when exited it clears the error
           idle: {
-            exit: ['clearErrorMessage'],
+            id: 'idle',
             on: {
-              // 3. send valiid email to the checkingEmail state
-              CONFIRM_EMAIL: [
+              ON_CHANGE_EMAIL: [
                 {
-                  target: 'sendEmailToServer',
-                  cond: 'isValidEmail',
-                  actions: ['assignEmailToContext'],
+                  target: 'success',
+                  cond: isEmailValid,
+                },
+                {
+                  target: 'failure',
                 },
               ],
             },
           },
-          sendEmailToServer: {
-            invoke: {
-              id: 'checkEmail',
-              src: (context) => {
-                console.log(context.email);
-                postData(authCheckEmailAPI, { email: context.email });
-              },
-              onDone: [
-                {
-                  target: 'complete',
-                },
-              ],
-              onError: {
-                target: 'idle',
-                actions: 'assignErrorMessageToContext',
-              },
-            },
-          },
-          complete: { type: 'final' },
-        },
-        onDone: {
-          target: 'enteringAuthToken',
+          // validating: {
+          //   invoke: {
+          //     id: 'validating',
+          //     src: (context, event) => {
+          //       console.log('validating');
+          //     },
+          //     onDone: {
+          //       target: 'success',
+          //     },
+          //     onError: {
+          //       target: 'failure',
+          //     },
+          //   },
+          // },
+          success: {},
+          failure: {},
+          submitting: {},
         },
       },
-      enteringAuthToken: {
-        id: 'enteringAuthToken',
+      enteringCode: {
+        intial: 'idle',
+        states: {
+          idle: {},
+          valid: {},
+          invalid: {},
+          submitting: {},
+        },
       },
-      // enteringAuthToken: {
-      //   id: 'enteringAuthToken',
-      //   onDone: {
-      //     target: 'confirming',
-      //   },
-      //   initial: 'idle',
-      //   states: {
-      //     idle: {
-      //       exit: ['clearErrorMessage'],
-      //       on: {
-      //         CONFIRM_AUH_TOKEN: {
-      //           target: 'submitting',
-      //           actions: ['assignAuthTokenToContext'],
-      //         },
-      //         BACK: {
-      //           target: '#enteringEmail',
-      //         },
-      //       },
-      //     },
-      //     submitting: {
-      //       schema: {
-      //         services: {} as {
-      //           validateEmail: {
-      //             // The data that gets returned from the service
-      //             email: { email: string };
-      //           };
-      //         },
-      //       },
-      //       invoke: {
-      //         schema: {
-      //           services: {} as {
-      //             checkAuthToken: {
-      //               // The data that gets returned from the service
-      //               authToken: { authToken: string };
-      //             };
-      //           },
-      //         },
-      //         src: (context) => checkAuthToken(context.authToken),
-      //         onDone: {
-      //           target: 'complete',
-      //         },
-      //         onError: {
-      //           target: 'idle',
-      //           actions: 'assignErrorMessageToContext',
-      //         },
-      //       },
-      //     },
-      //     complete: { type: 'final' },
-      //   },
-      // },
-      // confirming: {
-      //   onDone: {
-      //     target: 'success',
-      //   },
-      //   initial: 'idle',
-      //   states: {
-      //     idle: {
-      //       exit: ['clearErrorMessage'],
-      //       on: {
-      //         CONFIRM: 'submitting',
-      //         BACK: {
-      //           target: '#enteringAuthToken',
-      //         },
-      //       },
-      //     },
-      // submitting: {
-      //   invoke: {
-      //     src: '',
-      //     onDone: {
-      //       target: 'complete',
-      //     },
-      //     onError: {
-      //       target: 'idle',
-      //       actions: 'assignErrorMessageToContext',
-      //     },
-      //   },
-      // },
-      // complete: { type: 'final' },
-      //   },
-      // },
-      // success: {
-      //   type: 'final',
-      // },
     },
   },
   {
     actions: {
       assignEmailToContext: assign((context, event) => {
         if (event.type !== 'CONFIRM_EMAIL') return {};
-        console.log('assignEmailToContext', event);
         const { email } = event;
         return {
           email: email,
         };
       }),
-      // assignAuthTokenToContext: assign((context, event) => {
-      //   if (event.type !== 'CONFIRM_AUTH_TOKEN') return {};
-      //   return {
-      //     authToken: event.authToken,
-      //   };
-      // }),
-      clearErrorMessage: assign({
-        errorMessage: undefined,
-      }),
-      assignErrorMessageToContext: assign((context, event: any) => {
-        return {
-          errorMessage: true,
-        };
-      }),
     },
     guards: {
-      isValidEmail: async (_, event) => {
-        const { email } = event;
-        console.log('isValidEmail email=', email);
-        const isEventValidEmail = await emailSchema
-          .isValid({ email: email })
-          .then((valid) => valid);
-        return isEventValidEmail;
-      },
+      // isEmailValid: async (context, event) => {
+      //     const { email } = event;
+      //     const emailSchema = yup.object().shape({
+      //       email: yup.string().email('must be valid email').length(5),
+      //     });
+      //     const result = await emailSchema.isValid({email: email});
+      //     console.log('isEmailValid result', result)
+      //     return result
+      // },
     },
   },
 );
