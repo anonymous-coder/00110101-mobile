@@ -68,7 +68,7 @@ const AuthFormMachine = createMachine(
           },
           sendToServer: {
             invoke: {
-              src: (context, event) => invokeCheckEmail,
+              src: (context, event) => invokeCheckEmail(context),
               onDone: {
                 target: '#enteringCode.idle',
               },
