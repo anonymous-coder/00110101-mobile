@@ -1,12 +1,30 @@
 import { assign, createMachine, interpret } from 'xstate';
-import { checkEmail, checkAuthToken, postData } from '../../../http';
+import { invokeCheckEmail } from '../../../http';
 import { authCheckEmailAPI, emailSchema } from '../../../constants';
 import * as yup from 'yup';
 
-const isEmailValid = (context, event) => {
-  console.log('context, event', context, event)
-  return context.canSearch && event.query && event.query.length > 0;
-};
+// const isEmailValid = async (context, event) => {
+//   const { email } = event
+//   console.log("isEmailValid")
+//   try {
+//     const response = await emailSchema.isValid({email: email})
+//     console.log('response', response)
+//     return Promise.resolve()
+//   } catch (error) {
+//     console.log('error', error)
+//     return Promise.rejected()
+//   }
+// }
+
+// const search = (context, event) => new Promise((resolve, reject) => {
+//   if (!event.query.length) {
+//     return reject('No query specified');
+//     // or:
+//     // throw new Error('No query specified');
+//   }
+
+//   return resolve(getSearchResults(event.query));
+// });
 const AuthFormMachine = createMachine(
   {
     tsTypes: {} as import('./machine.xstate.typegen').Typegen0,
@@ -19,7 +37,7 @@ const AuthFormMachine = createMachine(
     context: {
       email: '',
       authToken: '',
-      error: '',
+      error: false,
       errorMessage: '',
     },
     states: {
@@ -34,38 +52,40 @@ const AuthFormMachine = createMachine(
         states: {
           idle: {
             id: 'idle',
+            exit: 'clearErrorMessage',
             on: {
-              ON_CHANGE_EMAIL: [
+              ON_SUBMIT_EMAIL: [
                 {
-                  target: 'success',
-                  cond: isEmailValid,
-                },
-                {
-                  target: 'failure',
-                },
+                  target: 'sendToServer',
+                  cond: 'isEmailValid',
+                  actions: 'assignEmailToContext',
+                },{
+                  target: 'idle',
+                  actions: ['assignEmailErrorToContext']
+                }
               ],
             },
           },
-          // validating: {
-          //   invoke: {
-          //     id: 'validating',
-          //     src: (context, event) => {
-          //       console.log('validating');
-          //     },
-          //     onDone: {
-          //       target: 'success',
-          //     },
-          //     onError: {
-          //       target: 'failure',
-          //     },
-          //   },
-          // },
-          success: {},
-          failure: {},
+          sendToServer: {
+            invoke: {
+              src: (context, event) => invokeCheckEmail,
+              onDone: {
+                target: '#enteringCode.idle',
+              },
+              onError: {
+                target: 'idle',
+                actions: ['assignServerEmailErrorToContext']
+              },
+            },
+          },
+          failure: {
+            always: 'idle',
+          },
           submitting: {},
         },
       },
       enteringCode: {
+        id: 'enteringCode',
         intial: 'idle',
         states: {
           idle: {},
@@ -79,23 +99,46 @@ const AuthFormMachine = createMachine(
   {
     actions: {
       assignEmailToContext: assign((context, event) => {
-        if (event.type !== 'CONFIRM_EMAIL') return {};
+        if (event.type !== 'ON_SUBMIT_EMAIL') return {};
         const { email } = event;
         return {
           email: email,
         };
       }),
+      assignEmailErrorToContext: assign((context, event) => {
+        if (event.type !== 'ON_SUBMIT_EMAIL') return {};
+        const { email } = event;
+        return {
+          errorMessage: 'invalid email',
+          error: true,
+        };
+      }),
+      assignServerEmailErrorToContext: assign((context, event) => {
+        if (event.type !== 'ON_SUBMIT_EMAIL') return {};
+        const { email } = event;
+        return {
+          errorMessage: 'something went wrong',
+          error: true,
+        };
+      }),
+      clearErrorMessage: assign((context, event) => {
+        if (event.type !== 'ON_SUBMIT_EMAIL') return {};
+        const { email } = event;
+        return {
+          errorMessage: '',
+          error: false,
+        };
+      }),
     },
     guards: {
-      // isEmailValid: async (context, event) => {
-      //     const { email } = event;
-      //     const emailSchema = yup.object().shape({
-      //       email: yup.string().email('must be valid email').length(5),
-      //     });
-      //     const result = await emailSchema.isValid({email: email});
-      //     console.log('isEmailValid result', result)
-      //     return result
-      // },
+      isEmailValid: (_, event) => {
+        const { email } = event;
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+          return true;
+        } else {
+          return false;
+        }
+      },
     },
   },
 );

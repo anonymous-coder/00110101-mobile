@@ -3,10 +3,15 @@
 export interface Typegen0 {
   '@@xstate/typegen': true;
   internalEvents: {
+    'error.platform.AuthFormMachineWithValidation.enteringEmail.sendToServer:invocation[0]': {
+      type: 'error.platform.AuthFormMachineWithValidation.enteringEmail.sendToServer:invocation[0]';
+      data: unknown;
+    };
     'xstate.after(2000)#AuthFormMachineWithValidation.greetings': {
       type: 'xstate.after(2000)#AuthFormMachineWithValidation.greetings';
     };
     'xstate.init': { type: 'xstate.init' };
+    'xstate.stop': { type: 'xstate.stop' };
   };
   invokeSrcNameMap: {};
   missingImplementations: {
@@ -15,9 +20,16 @@ export interface Typegen0 {
     guards: never;
     delays: never;
   };
-  eventsCausingActions: {};
+  eventsCausingActions: {
+    assignEmailErrorToContext: 'ON_SUBMIT_EMAIL';
+    assignEmailToContext: 'ON_SUBMIT_EMAIL';
+    assignServerEmailErrorToContext: 'error.platform.AuthFormMachineWithValidation.enteringEmail.sendToServer:invocation[0]';
+    clearErrorMessage: 'ON_SUBMIT_EMAIL' | 'xstate.stop';
+  };
   eventsCausingServices: {};
-  eventsCausingGuards: {};
+  eventsCausingGuards: {
+    isEmailValid: 'ON_SUBMIT_EMAIL';
+  };
   eventsCausingDelays: {};
   matchesStates:
     | 'enteringCode'
@@ -28,12 +40,12 @@ export interface Typegen0 {
     | 'enteringEmail'
     | 'enteringEmail.failure'
     | 'enteringEmail.idle'
+    | 'enteringEmail.sendToServer'
     | 'enteringEmail.submitting'
-    | 'enteringEmail.success'
     | 'greetings'
     | {
         enteringCode?: 'idle' | 'invalid' | 'submitting' | 'valid';
-        enteringEmail?: 'failure' | 'idle' | 'submitting' | 'success';
+        enteringEmail?: 'failure' | 'idle' | 'sendToServer' | 'submitting';
       };
   tags: never;
 }

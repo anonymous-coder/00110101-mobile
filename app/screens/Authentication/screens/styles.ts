@@ -39,9 +39,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     width: width,
     // borderLeftWidth: 10,
-    borderLeftBackgroundColor: '#111'
-
-
+    borderLeftBackgroundColor: '#111',
   },
   errorLabelWrapper: {
     display: 'flex',
@@ -51,9 +49,7 @@ export const styles = StyleSheet.create({
     width: width,
     marginTop: 50,
     // borderLeftWidth: 10,
-    borderLeftBackgroundColor: '#111'
-
-
+    borderLeftBackgroundColor: '#111',
   },
   errorLabel: {
     fontSize: 24,

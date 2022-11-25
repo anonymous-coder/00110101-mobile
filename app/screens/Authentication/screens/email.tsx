@@ -7,6 +7,7 @@ import Animated, {
   Easing,
   withSpring,
   SlideInDown,
+  FadeOut,
 } from 'react-native-reanimated';
 import { useMachine } from '@xstate/react';
 import AuthFormMachine from '../xstate/machine.xstate.ts';
@@ -24,7 +25,7 @@ function SideBar() {
   );
 }
 
-function Label({label}) {
+function Label({ label }) {
   return (
     <View style={styles.labelWrapper}>
       <View style={styles.inputBarWrapper}>
@@ -40,19 +41,36 @@ function Label({label}) {
   );
 }
 
-function ErrorMessageLabel({error}) {
+function ErrorMessageLabel({ errorMessage }) {
+  const offset = useSharedValue(-900);
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: withTiming(0, {
+            duration: 3000,
+          }),
+        },
+      ],
+    };
+  });
   return (
-    <View style={styles.errorLabelWrapper}>
-      <View style={styles.inputBarWrapper}>
-        <View style={styles.errorInputBar} />
-      </View>
+    <Animated.View
+      entering={SlideInDown.duration(1000).withInitialValues(height + 100)}
+      exiting={FadeOut.duration(1000)}
+      style={[styles.errorLabelWrapper, animatedStyles]}
+    >
+      <Animated.View style={styles.inputBarWrapper}>
+        <Animated.View style={styles.errorInputBar} />
+      </Animated.View>
 
-      <View style={styles.inputBarSpace} />
+      <Animated.View style={styles.inputBarSpace} />
 
-      <View style={styles.labelWrapper}>
-        <Text style={styles.errorLabel}>{error}</Text>
-      </View>
-    </View>
+      <Animated.View style={styles.labelWrapper}>
+        <Text style={styles.errorLabel}>{errorMessage}</Text>
+      </Animated.View>
+    </Animated.View>
   );
 }
 
@@ -79,9 +97,10 @@ function Input({ value, onChangeText }) {
   );
 }
 
-function Form({ value, onChangeText, placeholder, state, onPress, errorMessage }) {
+function Form({ value, onChangeText, placeholder, state, onPress, error, errorMessage }) {
   const offset = useSharedValue(200);
-
+  console.log('errorMessage', errorMessage);
+  console.log('error', error);
   const animatedStyles = useAnimatedStyle(() => {
     return {
       transform: [
@@ -100,15 +119,18 @@ function Form({ value, onChangeText, placeholder, state, onPress, errorMessage }
     >
       <Animated.View style={styles.top}>
         <View style={styles.topSpace} />
-        <Label label={'ENTER EMAIL'}/>
+
+        <Label label={'ENTER EMAIL'} />
+
         <Input onChangeText={onChangeText} value={value} placeholder={placeholder} />
-        {errorMessage !== '' ? <ErrorMessageLabel error={errorMessage} />  : null}
-        
-   
+
+        {error ? <ErrorMessageLabel errorMessage={errorMessage} /> : null}
       </Animated.View>
+
       <View style={styles.topSpace} />
       <View style={styles.topSpace} />
       <View style={styles.topSpace} />
+
       <TextBtn label="submit" onPress={onPress} />
     </Animated.View>
   );
@@ -117,22 +139,16 @@ function Form({ value, onChangeText, placeholder, state, onPress, errorMessage }
 export function EmailScreen() {
   const [state, send, service] = useMachine(AuthFormMachine);
   const [email, setEmail] = React.useState('');
-  const [errorMessage, setErrorMessage] = React.useState('');
+  console.log('state.context', state.context);
 
-  console.log('failure', state.matches('enteringEmail.failure'));
-  console.log('success', state.matches('enteringEmail.success'));
+  const errorMessage = state.context.error ? state.context.errorMessage : null;
 
   function onChangeEmail(text: string) {
     setEmail(text);
   }
 
   function onSubmitEmail(email: string) {
-    if(email.length >= 6) {
-      console.log('email', email.length)
-      send({ type: 'ON_SUBMIT_EMAIL', email });
-    } else {
-      setErrorMessage('Must be valid email')
-    }
+    send({ type: 'ON_SUBMIT_EMAIL', email });
   }
 
   return (
@@ -144,7 +160,8 @@ export function EmailScreen() {
         placeholder={'rache@example.com'}
         state={state}
         onPress={() => onSubmitEmail(email)}
-        errorMessage={errorMessage}
+        error={state.context.error}
+        errorMessage={state.context.errorMessage}
       />
     </SafeAreaView>
   );

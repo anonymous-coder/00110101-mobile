@@ -1,4 +1,5 @@
 export function invokeCheckEmail(context) {
+  console.log('invokeCheckEmail');
   const { email } = context;
 
   return fetch('http://localhost:8080/api/v1/auth/check-email', {
